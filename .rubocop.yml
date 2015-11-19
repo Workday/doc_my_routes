@@ -1,0 +1,31 @@
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+AbcSize:
+  Max: 20
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  Enabled: false
+  EnforcedStyle: aligned
+
+Style/MultilineBlockLayout:
+  Enabled: false
+
+BracesAroundHashParameters:
+  Enabled: false
+
+NumericLiterals:
+  Enabled: false
+
+MethodLength:
+  Max: 15
+
+AccessorMethodName:
+  Enabled: false
+
+SingleLineBlockParams:
+  Enabled: false
+
