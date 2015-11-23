@@ -1,5 +1,7 @@
 # DocMyRoutes
 
+[![Build Status](https://travis-ci.org/Workday/doc_my_routes.svg)](https://travis-ci.org/Workday/doc_my_routes)
+
 This gem provides helpers to annotate Sinatra routes and automatically generate documentation.
 
 Routes can be annotated with information such as:
