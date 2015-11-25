@@ -34,7 +34,7 @@ Using DocMyRoutes is quite straight-forward and it basically requires two steps:
 First of all, DocMyRoutes needs to be configured with your project title
 and description (see the *Customisation* section for other options).
 
-Simply ```require doc_my_routes``` and set the two options:
+Simply ```require 'doc_my_routes'``` and set the two options:
 
 ```ruby
 DocMyRoutes.configure do |config|
@@ -153,7 +153,7 @@ end
 
 ## What kind of applications are supported?
 
-DocMyRoutes can generate documentation for most Sinatra application and it
+DocMyRoutes can generate documentation for most Sinatra applications and it
 also automatically detects when an application is mounted on a different path.
 
 The following two examples both would work.
