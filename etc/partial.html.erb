@@ -1,0 +1,154 @@
+<section class="documentation">
+  <header>
+    <div id="api_info" class="info">
+      <div class="info_title"><%= data[:main][:info][:title] %></div>
+      <div class="info_description"><%= data[:main][:info][:description] %></div>
+    </div>
+  </header>
+
+  <section class="resources">
+    <%# API documentation content %>
+    <%
+    data[:main][:apis].each do |resource_name, operations|
+    %>
+      <article class="resource">
+        <details open>
+          <summary class="resource"><%= resource_name %></summary>
+          <%
+            operations.sort_by { |route| route[:http_method] }.each do |route|
+               verb = route[:http_method]
+          %>
+            <article class="operation <%= verb.downcase %>">
+              <details>
+              <summary class="operation">
+                <span class="http_method <%= verb.downcase %>">
+                  <%= verb %><%= ' / HEAD' if verb == 'GET' %>
+                </span>
+                <span class="path <%= verb.downcase %>">
+                  <%= route[:path]%>
+                </span>
+                <span class="summary <%= verb.downcase %>">
+                  <%= route[:summary]%>
+                </span>
+              </summary>
+              <div class="content <%= verb.downcase %>">
+                <% unless route[:produces].empty? %>
+                  <h4>Content Type</h4>
+                  <p><%= route[:produces].join(', ')  %></p>
+                <% end %>
+
+                <% if route[:notes] && !route[:notes].empty? %>
+                  <h4>Implementation Notes</h4>
+                  <p><%= route[:notes] %></p>
+                <% end %>
+
+                <%# List of , if present %>
+                <% if route[:parameters] && !route[:parameters].empty? %>
+                  <table class="smallwidth">
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                      </tr>
+                    </thead>
+                    <tbody class="operation-params">
+                    <% route[:parameters].each do |param| %>
+                      <tr>
+                        <td><%= param %></td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                <% end %>
+
+                <%# List of possible response statuses %>
+                <h4>Response statuses</h4>
+                <table class="smallwidth">
+                  <thead>
+                    <tr>
+                      <th class="status_code">HTTP Status Code</th>
+                      <th class="status_code_message">Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody class="operation-status">
+                    <% route[:status_codes].each do |status_code, description| %>
+                      <tr>
+                        <td class="status_code"><%= status_code %></td>
+                        <td class="status_code_message"><%= description %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+
+                <%# Display examples, if present %>
+                <% if route[:examples] %>
+                  <h4>Examples</h4>
+                  <div>
+                    <%# TODO: move this logic outside %>
+                    <% route[:examples].each do |example| %>
+                      <article class="example <%= verb.downcase %>">
+                        <details>
+                          <summary class="example <%= verb.downcase %>"><%= example['description'] %></summary>
+                          <div class="example_content <%= verb.downcase %>">
+                            <div class="request">
+                              <h4>Request</h4>
+                              <div class="code <%= verb.downcase %>">
+                                <div>
+                                  <h5>Query</h5>
+                                  <pre class='request-code query'><code class="json"><%= example['request']['query'] %></code></pre>
+                                </div>
+
+                                <% if example['request']['headers'] %>
+                                  <div>
+                                    <h5>Headers</h5>
+                                    <% example['request']['headers'].each do |key, value| %>
+                                      <pre class="request-code headers"><code class="json"><%= key %>: <%= value %></code></pre>
+                                    <% end %>
+                                  </div>
+                                <% end %>
+
+                                <% if example['request']['body'] %>
+                                  <div>
+                                    <h5>Body</h5>
+                                    <pre class='request-code body'><code class="json"><%= example['request']['body'] %></code></pre>
+                                  </div>
+                                <% end %>
+                              </div>
+                            </div>
+
+                            <div class="response">
+                              <h4>Response (status <%= example['response']['status'] %>)</h4>
+                              <div class="code <%= verb.downcase %>">
+                                <% if example['response']['headers'] %>
+                                  <div>
+                                    <h5>Headers</h5>
+                                    <% example['response']['headers'].each do |key, value| %>
+                                      <pre class="request-code headers"><code class="json"><%= key %>: <%= value %></code></pre>
+                                    <% end %>
+                                  </div>
+                                <% end %>
+
+                                <div>
+                                  <h5>Body</h5>
+                                  <% if example['response']['body'] %>
+                                    <pre class='request-code body'><code class="json"><%= example['response']['body'] %></code></pre>
+                                  <% else %>
+                                    <pre class='request-code body'><code class="json">No body</code></pre>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </details>
+                      </article>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              </details>
+            </article>
+          <% end %>
+        </details>
+      </article>
+    <% end %>
+  </section>
+</section>
