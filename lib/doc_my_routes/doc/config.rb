@@ -16,18 +16,22 @@ module DocMyRoutes
                     :description, # Project description
                     :destination_dir, # Where to store the documentation
                     :css_file_path, # Path to look for a CSS file
-                    :examples_path_regexp # Path regexp to example files
-      attr_reader :index_template_file # Template used for the index.html
+                    :examples_path_regexp, # Path regexp to example files
+                    :format # format to output
+      attr_reader :index_template_file, # Template used for the index.html
+                  :partial_template_file
 
       def initialize
         @title = @description = @examples_path_regexp = nil
 
         @destination_dir = File.join(Dir.pwd, 'doc', 'api')
+        @format = :html
 
         default_static_path = File.join(File.dirname(__FILE__), '..', '..',
                                         '..', 'etc')
         @css_file_path = File.join(default_static_path, 'css', 'base.css')
         @index_template_file = File.join(default_static_path, 'index.html.erb')
+        @partial_template_file = File.join(default_static_path, 'partial.html.erb')
       end
 
       def examples

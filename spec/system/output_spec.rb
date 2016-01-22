@@ -1,4 +1,5 @@
 require_relative '../spec_helper.rb'
+require 'nokogiri'
 
 describe DocMyRoutes do
   before do
@@ -8,6 +9,15 @@ describe DocMyRoutes do
   end
 
   context 'with summary, notes and status codes for a GET verb' do
+    let (:tmp_dir) { Dir.mktmpdir }
+    after { FileUtils.remove_entry tmp_dir }
+
+    before do
+      DocMyRoutes.configure do |c|
+        c.destination_dir = tmp_dir
+      end
+    end
+
     def doc_route
       # Test class with only two routes GET and HEAD
       self.class.const_set :DocRoute, Class.new(DocMyRoutes::Test::MyApp) {
@@ -19,12 +29,32 @@ describe DocMyRoutes do
       }
     end
 
-    it 'generates a valid HTML file' do
-      pending 'Validate output'
-      fail
-      # doc_route
-      # TODO: validate output
-      # DocMyRoutes::Documentation.generate
+    context 'when I run the generation' do
+      subject do
+        DocMyRoutes::Documentation.generate
+        Nokogiri::XML(File.open("#{tmp_dir}/index.html"))
+      end
+
+      context 'using the default formatter' do
+        it 'generates a valid HTML file' do
+          expect(subject.children.size).to eq 2
+          expect(subject.children[1].name).to eq('html')
+        end
+      end
+
+      context 'using the :partial_html formatter' do
+        before do
+          DocMyRoutes.configure do |c|
+            c.format = :partial_html
+            c.destination_dir = tmp_dir
+          end
+        end
+
+        it 'generates a valid HTML file' do
+          expect(subject.children.size).to eq 1
+          expect(subject.children.first.name).to eq('section')
+        end
+      end
     end
   end
 end
