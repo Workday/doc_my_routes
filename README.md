@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/Workday/doc_my_routes.svg)](https://travis-ci.org/Workday/doc_my_routes)
 [![Gem Version](https://badge.fury.io/rb/doc_my_routes.svg)](https://badge.fury.io/rb/doc_my_routes)
 
-This gem provides helpers to annotate Sinatra routes and automatically generate documentation.
+This gem provides helpers to annotate Sinatra routes and automatically generate HTML API documentation.
 
 Routes can be annotated with information such as:
 * summary (short description)
@@ -86,6 +86,8 @@ require_relative 'my_app'
 DocMyRoutes::Documentation.generate
 ...
 ```
+
+This will generate HTML API documentation to the configured ```destination_dir```. By default the destination directory is ```doc/api```.
 
 ### Associating examples
 
