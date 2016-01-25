@@ -32,10 +32,12 @@ describe DocMyRoutes do
     context 'when I run the generation' do
       subject do
         DocMyRoutes::Documentation.generate
-        Nokogiri::XML(File.open("#{tmp_dir}/index.html"))
+        Nokogiri::XML(File.open("#{tmp_dir}/#{output_file}.html"))
       end
 
       context 'using the default formatter' do
+        let(:output_file) { 'index' }
+
         it 'generates a valid HTML file' do
           expect(subject.children.size).to eq 2
           expect(subject.children[1].name).to eq('html')
@@ -43,6 +45,8 @@ describe DocMyRoutes do
       end
 
       context 'using the :partial_html formatter' do
+        let(:output_file) { 'index_partial' }
+
         before do
           DocMyRoutes.configure do |c|
             c.format = :partial_html

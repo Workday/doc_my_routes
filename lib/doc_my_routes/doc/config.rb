@@ -28,6 +28,7 @@ module DocMyRoutes
 
         @destination_dir = File.join(Dir.pwd, 'doc', 'api')
         @format = :html
+        @partial = false
 
         default_static_path = File.join(File.dirname(__FILE__), '..', '..',
                                         '..', 'etc')
@@ -45,6 +46,7 @@ module DocMyRoutes
         fail UnsupportedFormat,
           "The output format must be :html or :partial_format. It is #{@format}" \
           unless %i(html partial_html).include?(@format)
+        @partial = true
       end
 
       # Calculate the relative path of the CSS used
@@ -54,7 +56,8 @@ module DocMyRoutes
       end
 
       def index_file
-        File.join(@destination_dir, 'index.html')
+        filename = @partial ? 'index_partial.html' : 'index.html'
+        File.join(@destination_dir, filename)
       end
     end
   end
