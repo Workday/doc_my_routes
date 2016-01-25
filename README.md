@@ -70,6 +70,9 @@ class MyApp < Sinatra::Base
 end
 ```
 
+Note that configuring ```format = :partial_html``` generates an HTML snippet
+that can be easily embedded, instead of a complete HTML page.
+
 ### Generating documentation
 
 In your *config.ru* (or in your main .rb file) you can trigger the generation
