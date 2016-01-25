@@ -222,6 +222,9 @@ first section of the documentation and should always be configured.
 The setting ```destination_dir``` defines where to store the generated
 documentation.
 
+### Customise format
+The output format may be customised by setting the ```format``` setting. At present ```:html``` and ```:partial_html``` are supported (default ```:html```). ```:html``` produces a full html page with a head and body section. ```:partial_html``` produces the documentation that maybe embedded in another webpage.
+
 ### Customise output
 
 A custom CSS file can be provided to change the look and feel of the
