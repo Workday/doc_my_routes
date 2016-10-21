@@ -113,10 +113,10 @@ module DocMyRoutes
 
       # Detects if multiple locations are available and for now fail
       def validate_locations(resource, locations)
-        fail "Resource #{resource} has no mapping, so we can't tell where it is mounted!" \
-          if locations.nil?
+        fail NoMappingDetected, "Resource #{resource} has no mapping, so we can't tell where " \
+          'it is mounted!' if locations.nil?
         fail MultipleMappingDetected, "Resource #{resource} has multiple mappings, but that's " \
-              "not supported yet: #{locations}" if locations.size > 1
+          "not supported yet: #{locations}" if locations.size > 1
 
         return locations.first if locations.size == 1
 
