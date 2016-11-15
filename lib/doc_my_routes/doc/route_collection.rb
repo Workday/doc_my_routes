@@ -20,7 +20,7 @@ module DocMyRoutes
           namespace = format('%-50s', app_routes.first.namespace)
           DocMyRoutes.logger.debug "Adding route to #{namespace} - #{app_name}"
 
-          app_routes.each { |rte| logger.debug " - #{rte}" }
+          app_routes.each { |rte| DocMyRoutes.logger.debug " - #{rte}" }
         end
       end
     end
