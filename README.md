@@ -199,6 +199,31 @@ DocMyRoutes::Documentation.generate
 ...
 ```
 
+Note: there are occasions where an application may be mounted using url map and
+be composed of other apps by making use of the 'use' directive in rack. In this
+case, you need to tell DocMyRoutes to link the two together. By doing this,
+DocMyRoutes will automatically provide documentation for the child apps mounted
+wherever the composed app ends up being mounted.
+
+e.g.
+
+```ruby
+class MyChildApp; end
+class MyOtherChildApp; end
+
+class MyComposedApp
+  DocMyRoutes::Mapping.inherit_mapping(MyChildApp, self)
+  DocMyRoutes::Mapping.inherit_mapping(MyOtherChildApp, self)
+
+  use MyChildApp
+  use MyOtherChildApp
+end
+
+app = Rack::Builder.app do
+  run Rack::URLMap.new('/myapp' => MyComposedApp.new)
+end
+```
+
 ## Customisation
 
 Some aspects of DocMyRoutes can be customised to provide a different user
