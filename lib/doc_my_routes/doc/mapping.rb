@@ -36,6 +36,10 @@ module DocMyRoutes
         Object.const_defined?('Rack::URLMap')
       end
 
+      def inherit_mapping(child_class, super_class)
+        (@inherited_mappings ||= {})[child_class.to_s] = super_class.to_s
+      end
+
       # This method associates to each route its namespace, if detected.
       #
       # Note: when application A is inherited by B and only B is mapped, from
@@ -100,15 +104,19 @@ module DocMyRoutes
         class_name = remapped_applications[class_name].first if \
           remapped_applications.key?(class_name)
 
-        locations = route_mapping[class_name]
+        validate_locations(class_name, extract_locations(class_name))
+      end
 
-        validate_locations(class_name, locations)
+      def extract_locations(class_name)
+        route_mapping[class_name] || route_mapping[(@inherited_mappings || {})[class_name]]
       end
 
       # Detects if multiple locations are available and for now fail
       def validate_locations(resource, locations)
-        fail "Resource #{resource} has multiple mappings, but that's not " \
-              "supported yet: #{locations}" if locations.size > 1
+        fail NoMappingDetected, "Resource #{resource} has no mapping, so we can't tell where " \
+          'it is mounted!' if locations.nil?
+        fail MultipleMappingDetected, "Resource #{resource} has multiple mappings, but that's " \
+          "not supported yet: #{locations}" if locations.size > 1
 
         return locations.first if locations.size == 1
 
