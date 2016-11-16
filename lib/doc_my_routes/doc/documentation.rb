@@ -31,7 +31,7 @@ module DocMyRoutes
 
     def generate_content
       routes.each do |resource, rts|
-        content[:main][:apis][resource_name(resource)] = rts.map(&:to_hash)
+        (content[:main][:apis][resource_name(resource)] ||= []).concat(rts.map(&:to_hash))
       end
     end
 
