@@ -52,7 +52,6 @@ module DocMyRoutes
 
     def route_documentation
       @route_documentation ||= begin
-        DocMyRoutes.logger.debug 'Tracking new route'
         RouteDocumentation.new
       end
     end
