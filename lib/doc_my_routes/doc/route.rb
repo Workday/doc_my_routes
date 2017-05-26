@@ -24,7 +24,7 @@ module DocMyRoutes
     end
 
     def to_hash
-      deep_merge({
+      HashHelpers.deep_merge({
         http_method: verb,
         parameters: param_info,
         path: path
