@@ -3,12 +3,13 @@ module DocMyRoutes
   class RouteDocumentation
     attr_accessor :summary, :notes, :status_codes, :examples_regex, :hidden,
                   :produces, :notes_ref
-    attr_reader :examples
+    attr_reader :examples, :parameters
 
     def initialize
       @status_codes = { 200 => DocMyRoutes::StatusCodeInfo::STATUS_CODES[200] }
       @hidden = false
       @produces = []
+      @parameters = {}
     end
 
     # A route documentation object MUST have a summary, otherwise is not
@@ -25,12 +26,17 @@ module DocMyRoutes
         examples_regex: examples_regex,
         produces: produces,
         examples: examples,
+        parameters: parameters,
         hidden: hidden?
       }
     end
 
     def produces=(values)
       @produces = values.flatten.compact
+    end
+
+    def add_parameter(name, options)
+      @parameters[name] = options
     end
 
     def status_codes=(route_status_codes)

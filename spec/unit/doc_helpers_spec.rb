@@ -11,6 +11,7 @@ describe 'Route documentation' do
   DEFAULT_NOTES = 'Example notes'
   DEFAULT_NOTES_FILE = 'etc/example_notes.txt'
   DEFAULT_STATUS_CODES = [200, 401]
+  DEFAULT_PARAMETER_OPTIONS = { type: :integer, description: 'example parameter' }
 
   def mock_notes_file(content, path = 'notes.txt')
     mock_notes_path = File.expand_path(path)
@@ -25,6 +26,7 @@ describe 'Route documentation' do
     doc.summary = DEFAULT_SUMMARY
     doc.notes = DEFAULT_NOTES
     doc.status_codes = DEFAULT_STATUS_CODES
+    doc.add_parameter(:example_id, DEFAULT_PARAMETER_OPTIONS)
     doc
   end
 
@@ -34,9 +36,7 @@ describe 'Route documentation' do
                         "Actual object #{actual} doesn't have documentation"
 
       actual_docs = actual.documentation
-      actual_docs.summary == expected.summary && \
-        actual_docs.notes == expected.notes && \
-        actual_docs.status_codes == expected.status_codes
+      actual_docs.to_hash == expected.to_hash
     end
     description { "The route #{actual} doesn't match #{expected}" }
   end
@@ -63,7 +63,7 @@ describe 'Route documentation' do
     DocMyRoutes::RouteCollection.routes.clear
   end
 
-  context 'with summary, notes and status codes for a GET verb' do
+  context 'with summary, notes, parameter and status codes for a GET verb' do
     subject do
       key = DocMyRoutes::RouteCollection.routes.keys[0]
       DocMyRoutes::RouteCollection.routes[key]
@@ -75,13 +75,16 @@ describe 'Route documentation' do
         summary DEFAULT_SUMMARY
         notes DEFAULT_NOTES
         status_codes DEFAULT_STATUS_CODES
+        parameter :example_id, DEFAULT_PARAMETER_OPTIONS
         get '/api/example' do
         end
       }
     end
+
+    it_behaves_like 'a correctly tracked route'
   end
 
-  context 'with a summary, notes in an external file and status codes' do
+  context 'with a summary, notes in an external file, parameter and status codes' do
     def doc_route
       mock_notes_file(DEFAULT_NOTES, DEFAULT_NOTES_FILE)
       # Test class with only two routes GET and HEAD
@@ -89,6 +92,7 @@ describe 'Route documentation' do
         summary DEFAULT_SUMMARY
         notes_ref DEFAULT_NOTES_FILE
         status_codes DEFAULT_STATUS_CODES
+        parameter :example_id, DEFAULT_PARAMETER_OPTIONS
         post '/api/example_notes_file' do
         end
       }

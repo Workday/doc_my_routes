@@ -64,6 +64,7 @@ class MyApp < Sinatra::Base
   notes 'Simple route that gets an ID and returns a string'
   produces 'text/plain'
   status_codes [200]
+  parameter :id, description: 'some ID'
   get '/:id' do |id|
     "Received #{id}"
   end

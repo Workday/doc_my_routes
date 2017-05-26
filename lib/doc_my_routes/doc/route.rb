@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'forwardable'
+require_relative 'hash_helpers'
 
 module DocMyRoutes
   # Simple object representing a route
@@ -23,11 +24,11 @@ module DocMyRoutes
     end
 
     def to_hash
-      {
+      deep_merge({
         http_method: verb,
         parameters: param_info,
         path: path
-      }.merge(documentation.to_hash)
+      }, documentation.to_hash)
     end
 
     def path
@@ -60,13 +61,15 @@ module DocMyRoutes
     #
     # Try to extract parameters from the route definition otherwise
     def param_info
-      if conditions[:parameters]
-        conditions[:parameters]
-      else
-        route_pattern.split('/').map do |part|
-          part.start_with?(':') ? part[1..-1].to_sym : nil
-        end.compact
-      end
+      path_parameters_array = route_pattern.split('/').map do |part|
+        part.start_with?(':') ? part[1..-1].to_sym : nil
+      end.compact
+
+      path_parameters = HashHelpers.array_to_hash_keys(path_parameters_array,
+                                                       { in: :path, required: true })
+      condition_parameters = HashHelpers.array_to_hash_keys(conditions[:parameters] || [])
+
+      HashHelpers.deep_merge(condition_parameters, path_parameters)
     end
   end
 end

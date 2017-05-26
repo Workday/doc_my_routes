@@ -87,6 +87,10 @@ module DocMyRoutes
       route_documentation.notes_ref = value
     end
 
+    def parameter(value, options = {})
+      route_documentation.add_parameter(value, options)
+    end
+
     private
 
     def track_route(resource, verb, route_pattern, conditions)
