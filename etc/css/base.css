@@ -248,7 +248,7 @@ table
 table td
 {
   border-top:1px solid #ccc;
-  padding:.5em .5em .5em 0;
+  padding:.5em 1.5em .5em 0;
 }
 
 thead
@@ -282,21 +282,4 @@ article.example
 {
   color:#555;
   margin:1em;
-}
-
-.required_parameter
-{
-  color:#a41e22;
-  font-size:0.7em;
-}
-
-.parameter_type
-{
-  font-size:0.8em;
-  font-weight:400;
-}
-
-.parameter_in
-{
-  color:#555;
 }
