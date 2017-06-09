@@ -23,6 +23,10 @@ module DocMyRoutes
       @documentation = documentation
     end
 
+    # We need to use deep merge as param_info method will return a hash for parameters
+    # with extracted information from the route path, and documentation might also have
+    # parameters with some more documentation and we don't want to loose extracted data
+    # from route path
     def to_hash
       HashHelpers.deep_merge({
         http_method: verb,
