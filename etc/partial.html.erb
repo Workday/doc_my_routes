@@ -48,12 +48,20 @@
                     <thead>
                       <tr>
                         <th>Parameter</th>
+                        <th>Required</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                        <th>Description</th>
                       </tr>
                     </thead>
                     <tbody class="operation-params">
-                    <% route[:parameters].each do |param| %>
+                    <% route[:parameters].each do |param_name, param_options| %>
                       <tr>
-                        <td><%= param %></td>
+                        <td><%= param_name %></td>
+                        <td><%= param_options[:required] ? 'Yes' : 'No' %></td>
+                        <td><%= param_options[:in] %></td>
+                        <td><%= param_options[:type] %></td>
+                        <td><%= param_options[:description] %></td>
                       </tr>
                     <% end %>
                     </tbody>
