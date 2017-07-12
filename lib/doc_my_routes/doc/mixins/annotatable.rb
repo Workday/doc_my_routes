@@ -18,10 +18,21 @@ module DocMyRoutes
       # features are enabled
       def extended(mod)
         # Wrap sinatra's route method to register the defined routes
-        mod.define_singleton_method(:route) do
-                                |verb, route_pattern, conditions = {}, &block|
-          result = super(verb, route_pattern, conditions, &block)
-          track_route(self, verb, route_pattern, conditions)
+        mod.define_singleton_method(:route) do |*args, &block|
+          result = super(*args, &block)
+          
+          options = args.last.is_a?(Hash) ? args.pop : {}
+          routes = [*args.pop].map(&:to_s) # ensure routes are strings
+          verbs = args.map { |verb| verb.is_a?(Symbol) ? verb.to_s.upcase : verb }
+          
+          verbs.each do |verb|
+            routes.each do |route_pattern|
+              reset_doc = verb.equal?(verbs.last) && route_pattern.equal?(routes.last)
+
+              track_route(self, verb, route_pattern, options, reset_doc, &block)
+            end
+          end
+
           result
         end
 
@@ -93,7 +104,7 @@ module DocMyRoutes
 
     private
 
-    def track_route(resource, verb, route_pattern, conditions)
+    def track_route(resource, verb, route_pattern, conditions, reset_doc)
       unless route_documentation.hidden? || skip_route(verb)
         route = Route.new(resource, verb, route_pattern, conditions,
                           route_documentation)
@@ -102,7 +113,7 @@ module DocMyRoutes
       end
 
       # Ensure values are reset
-      reset_doc_values
+      reset_doc_values if reset_doc
     end
 
     # The summary, notes and status codes are only valid for one route
