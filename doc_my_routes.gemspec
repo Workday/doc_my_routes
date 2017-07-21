@@ -25,5 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rack-test', '>= 0.6.2'
   spec.add_development_dependency 'rubocop', '>= 0.16'
   spec.add_development_dependency 'sinatra'
+  spec.add_development_dependency 'sinatra-contrib'
   spec.add_development_dependency 'nokogiri'
 end
